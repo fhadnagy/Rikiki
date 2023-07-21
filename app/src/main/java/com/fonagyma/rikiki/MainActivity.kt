@@ -18,6 +18,7 @@ import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,7 +33,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fonagyma.rikiki.ui.theme.RikikiTheme
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,8 +72,8 @@ fun WelcomeScreen(modifier: Modifier) {
 
 @Composable
 fun AgeSlider(modifier : Modifier, maxAge: Int = 99) {
-    var currentAge by remember { mutableStateOf(10) }
-
+    var currentAge by remember { mutableStateOf(0) }
+    var sliderPosition by remember { mutableStateOf(0f)}
     Column( 
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize(),
@@ -81,19 +81,33 @@ fun AgeSlider(modifier : Modifier, maxAge: Int = 99) {
     ) {
         Text(text = "Choose your age!", fontSize = 16.sp, modifier = Modifier.padding(5.dp))
         Text(text = "$currentAge", fontSize = 26.sp,fontWeight = FontWeight.Bold, modifier = Modifier.padding(5.dp,24.dp,5.dp,5.dp))
-        Row(
+        /*Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.SpaceAround,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
         ) {
-            IconButton(onClick = { currentAge--}) {
+            IconButton(onClick = {
+                if (currentAge>0){
+                    currentAge--
+                }
+            }) {
                 Icon(imageVector = Icons.Default.Delete, contentDescription = "remove")
             }
-            IconButton(onClick = { currentAge++ }) {
+            IconButton(onClick = {
+                if (currentAge<maxAge){
+                    currentAge++
+                }
+            }) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = "add")
             }
-        }
+        }*/
+        Slider(
+            modifier = Modifier.padding(16.dp),
+            value = sliderPosition,
+            onValueChange = { sliderPosition = it ;currentAge = (sliderPosition*maxAge).toInt()},
+            steps = maxAge-1
+        )
     }
 }
