@@ -23,6 +23,8 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -36,6 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fonagyma.rikiki.logic.Player
+import com.fonagyma.rikiki.ui.components.InputScreen
 import com.fonagyma.rikiki.ui.components.PlayerGuessPicker
 import com.fonagyma.rikiki.ui.theme.RikikiTheme
 class MainActivity : ComponentActivity() {
@@ -49,7 +52,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     //AgeSlider(modifier = Modifier.fillMaxSize(), maxAge = 10)
-                    GuessPickerScreen(maxGuess = 10)
+                    //GuessPickerScreen(maxGuess = 10)
+                    LogicController()
                 }
             }
         }
@@ -58,15 +62,21 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun LogicController(modifier: Modifier = Modifier.fillMaxSize()) {
-    val players = rememberSaveable { mutableStateListOf<Player>()}
-    var input by rememberSaveable { mutableStateOf(true)}
-    var isGamePlaying by rememberSaveable { mutableStateOf(false)}
-    var isEvaluate by rememberSaveable { mutableStateOf(false)}
-    var maxRounds by rememberSaveable { mutableStateOf(1)}
-    var currentRoundIndex by rememberSaveable { mutableStateOf(0)}
-    players.add(Player(0,"dummy"))
-    if(input){
+    val players = remember { mutableStateListOf<Player>(Player(0,"dummy"),Player(1,"ealm"),Player(2,"elma"))}
+    var input by remember { mutableStateOf(true)}
+    var isGamePlaying by remember{ mutableStateOf(false)}
+    var isEvaluate by remember { mutableStateOf(false)}
+    var maxRounds by remember { mutableStateOf(1)}
+    var currentRoundIndex by remember { mutableStateOf(0)}
 
+    if(input){
+        InputScreen(
+            maxRounds = maxRounds,
+            addPlayer = { pl -> players.add(pl) },
+            removePlayer = { pl -> players.remove(pl) },
+            playerList = players.toList(),
+            onMaxRoundChange = { newMax -> maxRounds = newMax }
+        )
     }
 }
 
