@@ -1,6 +1,7 @@
 package com.fonagyma.rikiki
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
@@ -32,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.fonagyma.rikiki.ui.components.PlayerGuessPicker
 import com.fonagyma.rikiki.ui.theme.RikikiTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,11 +45,23 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    AgeSlider(modifier = Modifier.fillMaxSize(), maxAge = 10)
+                    //AgeSlider(modifier = Modifier.fillMaxSize(), maxAge = 10)
+                    GuessPickerScreen(maxGuess = 10)
                 }
             }
         }
     }
+}
+
+@Composable
+fun GuessPickerScreen(maxGuess: Int) {
+    var guess by remember { mutableStateOf(0)}
+    PlayerGuessPicker(
+        currentGuess = guess,
+        maxGuess = maxGuess,
+        onNewValue = { newGuess -> guess = newGuess },
+        onChosen = {guess=0}
+    )
 }
 
 @Preview(showBackground = true,
@@ -66,7 +80,11 @@ fun WelcomeScreen(modifier: Modifier) {
        modifier = modifier.padding(10.dp),
        contentAlignment = Alignment.Center
    ){
-       Text(text = "Let's play Rikiki!", fontSize = 28.sp, fontWeight = FontWeight.Bold)
+       Text(
+           text = "Let's play Rikiki!",
+           fontSize = 28.sp,
+           fontWeight = FontWeight.Bold
+       )
    }
 }
 
@@ -79,9 +97,18 @@ fun AgeSlider(modifier : Modifier, maxAge: Int = 99) {
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
-        Text(text = "Choose your age!", fontSize = 16.sp, modifier = Modifier.padding(5.dp))
-        Text(text = "$currentAge", fontSize = 26.sp,fontWeight = FontWeight.Bold, modifier = Modifier.padding(5.dp,24.dp,5.dp,5.dp))
-        /*Row(
+        Text(
+            text = "Choose your age!",
+            fontSize = 16.sp,
+            modifier = Modifier.padding(5.dp)
+        )
+        Text(
+            text = "$currentAge",
+            fontSize = 56.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(5.dp, 24.dp, 5.dp, 5.dp)
+        )
+        Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceAround,
             modifier = Modifier
@@ -91,18 +118,26 @@ fun AgeSlider(modifier : Modifier, maxAge: Int = 99) {
             IconButton(onClick = {
                 if (currentAge>0){
                     currentAge--
+                    sliderPosition=currentAge/maxAge.toFloat()
                 }
             }) {
-                Icon(imageVector = Icons.Default.Delete, contentDescription = "remove")
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "remove"
+                )
             }
             IconButton(onClick = {
                 if (currentAge<maxAge){
                     currentAge++
+                    sliderPosition=currentAge/maxAge.toFloat()
                 }
             }) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "add")
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "add"
+                )
             }
-        }*/
+        }
         Slider(
             modifier = Modifier.padding(16.dp),
             value = sliderPosition,
