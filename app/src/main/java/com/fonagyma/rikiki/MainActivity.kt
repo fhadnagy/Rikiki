@@ -24,8 +24,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.fonagyma.rikiki.logic.Player
 import com.fonagyma.rikiki.ui.components.PlayerGuessPicker
 import com.fonagyma.rikiki.ui.theme.RikikiTheme
 class MainActivity : ComponentActivity() {
@@ -54,13 +57,29 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
+fun LogicController(modifier: Modifier = Modifier.fillMaxSize()) {
+    val players = rememberSaveable { mutableStateListOf<Player>()}
+    var input by rememberSaveable { mutableStateOf(true)}
+    var isGamePlaying by rememberSaveable { mutableStateOf(false)}
+    var isEvaluate by rememberSaveable { mutableStateOf(false)}
+    var maxRounds by rememberSaveable { mutableStateOf(1)}
+    var currentRoundIndex by rememberSaveable { mutableStateOf(0)}
+    players.add(Player(0,"dummy"))
+    if(input){
+
+    }
+}
+
+@Composable
 fun GuessPickerScreen(maxGuess: Int) {
     var guess by remember { mutableStateOf(0)}
+    var player by remember { mutableStateOf(1)}
     PlayerGuessPicker(
         currentGuess = guess,
         maxGuess = maxGuess,
+        playerID = player,
         onNewValue = { newGuess -> guess = newGuess },
-        onChosen = {guess=0}
+        onChosen = {guess=0;player++}
     )
 }
 
