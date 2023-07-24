@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
@@ -38,6 +40,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fonagyma.rikiki.logic.Player
+import com.fonagyma.rikiki.ui.components.BorderSurround
+import com.fonagyma.rikiki.ui.components.GameStateDisplay
 import com.fonagyma.rikiki.ui.components.InputScreen
 import com.fonagyma.rikiki.ui.components.PlayerGuessPicker
 import com.fonagyma.rikiki.ui.theme.RikikiTheme
@@ -52,8 +56,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     //AgeSlider(modifier = Modifier.fillMaxSize(), maxAge = 10)
-                    //GuessPickerScreen(maxGuess = 10)
-                    LogicController()
+                    GuessPickerScreen(maxGuess = 10)
+                    //LogicController()
                 }
             }
         }
@@ -65,35 +69,55 @@ fun LogicController(modifier: Modifier = Modifier.fillMaxSize()) {
     val players = remember { mutableStateListOf<Player>()}
     var input by remember { mutableStateOf(true)}
     var isGamePlaying by remember{ mutableStateOf(false)}
-    var isEvaluate by remember { mutableStateOf(false)}
+    var isEvaluate by remember { mutableStateOf(true)}
     var maxRounds by remember { mutableStateOf(1)}
-    var currentRoundIndex by remember { mutableStateOf(0)}
     var lastPlayerID by remember { mutableStateOf(0)}
+    //val scrollState = rememberScrollState()
 
-    if(input){
-        InputScreen(
-            maxRounds = maxRounds,
-            addPlayer = { pl -> players.add(pl) },
-            removePlayer = { pl -> players.remove(pl) },
-            playerList = players.toList(),
-            onMaxRoundChange = { newMax -> maxRounds = newMax },
-            increaseID = {lastPlayerID++},
-            lastPlayerID = lastPlayerID,
-            onDone = {input = false}
-        )
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+        //,modifier = modifier.verticalScroll(scrollState)
+    ) {
+        if(input){
+            BorderSurround {
+                InputScreen(
+                    maxRounds = maxRounds,
+                    addPlayer = { pl -> players.add(pl) },
+                    removePlayer = { pl -> players.remove(pl) },
+                    playerList = players.toList(),
+                    onMaxRoundChange = { newMax -> maxRounds = newMax; players.clear()},
+                    increaseID = {lastPlayerID++},
+                    lastPlayerID = lastPlayerID,
+                    onDone = {input = false;isEvaluate=true;isGamePlaying = true}
+                )
+            }
+
+        }
+
+
+        if (isEvaluate){
+            BorderSurround {
+                GameStateDisplay(players.toList())
+            }
+        }
     }
+
 }
 
 @Composable
 fun GuessPickerScreen(maxGuess: Int) {
     var guess by remember { mutableStateOf(0)}
-    var player by remember { mutableStateOf(1)}
+    var player by remember { mutableStateOf(Player(5,"sfa",5))}
+    var currentRound by remember {
+        mutableStateOf(0)
+    }
     PlayerGuessPicker(
         currentGuess = guess,
         maxGuess = maxGuess,
-        playerID = player,
+        player = player,
         onNewValue = { newGuess -> guess = newGuess },
-        onChosen = {guess=0;player++}
+        onChosen = {guess=0;player.guesses[currentRound]++}
     )
 }
 

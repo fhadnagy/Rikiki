@@ -27,12 +27,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.fonagyma.rikiki.logic.Player
 
 @Composable
 fun PlayerGuessPicker(
     currentGuess: Int,
     maxGuess: Int,
-    playerID: Int,
+    player: Player,
     onNewValue: (Int) -> Unit,
     onChosen: () -> Unit
 ) {
@@ -49,14 +50,13 @@ fun PlayerGuessPicker(
             shape = RoundedCornerShape(12.dp)
         ) {
             Text(
-                text = "playerID : $playerID",
-                fontSize = 42.sp,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center,
-                color= MaterialTheme.colorScheme.inversePrimary,
-                modifier = Modifier
-                    .padding(5.dp, 5.dp, 5.dp, 5.dp)
-                    .fillMaxWidth()
+                text = "${player.name} <${player.ID}>",
+                fontSize = MaterialTheme.typography.headlineLarge.fontSize,
+                fontWeight = MaterialTheme.typography.headlineLarge.fontWeight,
+                color = MaterialTheme.colorScheme.surface,
+                modifier = Modifier.fillMaxWidth()
+                    .padding(5.dp),
+                textAlign = TextAlign.Center
             )
         }
 

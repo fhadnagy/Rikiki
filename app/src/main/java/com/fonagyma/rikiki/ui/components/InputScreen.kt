@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,7 +21,9 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -71,12 +74,12 @@ fun InputScreen(
         modifier = modifier
         .verticalScroll(scrollingState)
         .fillMaxSize()
-        .padding(10.dp)) {
+        .padding(10.dp).heightIn(400.dp,900.dp)) {
         BorderSurround{
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(50.dp, 200.dp)
+                    .heightIn(40.dp, 200.dp)
                     .padding(10.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -124,14 +127,14 @@ fun InputScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(50.dp, 200.dp)
+                    .heightIn(40.dp, 200.dp)
                     .padding(10.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                OutlinedTextField(value = inputField, onValueChange = { inputField=it}, singleLine = true)
-                IconButton(onClick = {addPlayer(Player(lastPlayerID+1,inputField));increaseID()},Modifier.padding(5.dp)) {
-                    Icon(Icons.Default.Add, contentDescription = null)
+                OutlinedTextField(value = inputField, onValueChange = { inputField=it}, singleLine = true, leadingIcon = {Icon(Icons.Default.AccountCircle, contentDescription = null)})
+                IconButton(onClick = {addPlayer(Player(lastPlayerID+1,inputField,maxRounds*2-1));increaseID()},Modifier.padding(5.dp)) {
+                    Icon(Icons.Default.AddCircle, contentDescription = null)
                 }
             }
         }
@@ -177,7 +180,7 @@ fun PlayerRow(player: Player, onClose: ()->Unit,modifier: Modifier) {
 fun BorderSurround(content:  @Composable () -> Unit) {
     Surface(
         shape = RoundedCornerShape(10.dp),
-        border = BorderStroke(3.dp,MaterialTheme.colorScheme.inversePrimary),
+        border = BorderStroke(4.dp,MaterialTheme.colorScheme.inversePrimary),
         modifier = Modifier
             .fillMaxWidth()
             .padding(5.dp)
