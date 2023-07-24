@@ -62,12 +62,13 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun LogicController(modifier: Modifier = Modifier.fillMaxSize()) {
-    val players = remember { mutableStateListOf<Player>(Player(0,"dummy"),Player(1,"ealm"),Player(2,"elma"))}
+    val players = remember { mutableStateListOf<Player>()}
     var input by remember { mutableStateOf(true)}
     var isGamePlaying by remember{ mutableStateOf(false)}
     var isEvaluate by remember { mutableStateOf(false)}
     var maxRounds by remember { mutableStateOf(1)}
     var currentRoundIndex by remember { mutableStateOf(0)}
+    var lastPlayerID by remember { mutableStateOf(0)}
 
     if(input){
         InputScreen(
@@ -75,7 +76,10 @@ fun LogicController(modifier: Modifier = Modifier.fillMaxSize()) {
             addPlayer = { pl -> players.add(pl) },
             removePlayer = { pl -> players.remove(pl) },
             playerList = players.toList(),
-            onMaxRoundChange = { newMax -> maxRounds = newMax }
+            onMaxRoundChange = { newMax -> maxRounds = newMax },
+            increaseID = {lastPlayerID++},
+            lastPlayerID = lastPlayerID,
+            onDone = {input = false}
         )
     }
 }
