@@ -95,6 +95,9 @@ fun LogicController(modifier: Modifier = Modifier.fillMaxSize()) {
 
         }
 
+        if(isGamePlaying){
+
+        }
 
         if (isEvaluate){
             BorderSurround {
