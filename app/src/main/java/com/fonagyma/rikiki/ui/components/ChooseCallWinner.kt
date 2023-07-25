@@ -29,28 +29,30 @@ import java.lang.NumberFormatException
 fun ChooseCallWinner(
     callNumber: Int,
     playersList: List<Player>,
-    onPlayerChosen: (Player) -> Unit
+    onPlayerChosen: (Int) -> Unit
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(12.dp)
-    ) {
-        Text(
-            text = "Winner of call No. $callNumber",
-            fontSize = 60.sp,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(5.dp, 5.dp, 5.dp, 18.dp).fillMaxWidth()
-        )
+
         LazyColumn(
-            modifier = Modifier.fillMaxSize()
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(12.dp)
         ){
+            item {
+                Text(
+                    text = "Call No. $callNumber",
+                    fontSize = MaterialTheme.typography.headlineLarge.fontSize,
+                    fontWeight = MaterialTheme.typography.headlineLarge.fontWeight,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(16.dp),
+                    textAlign = TextAlign.Center
+                )
+            }
             items(playersList){
                 ElevatedButton(
-                    onClick = { onPlayerChosen(it) },
+                    onClick = { onPlayerChosen(playersList.indexOf(it)) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(6.dp)
@@ -67,6 +69,4 @@ fun ChooseCallWinner(
                 }
             }
         }
-
-    }
 }

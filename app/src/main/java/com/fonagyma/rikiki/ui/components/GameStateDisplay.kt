@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -48,19 +49,19 @@ fun PlayerDisplayRow(modifier: Modifier,player: Player) {
         .padding(5.dp)) {
         item { Text(
             text = "${player.name} <${player.ID}>",
-            fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-            fontWeight = MaterialTheme.typography.bodyMedium.fontWeight,
+            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+            fontWeight = MaterialTheme.typography.bodyLarge.fontWeight,
             color = MaterialTheme.colorScheme.secondary,
             textAlign = TextAlign.Left,
             modifier = Modifier
                 .padding(5.dp)
-                .width(110.dp)
+                .widthIn(110.dp)
         ) }
         items(outList){
             Text(
                 text = "$it",
-                fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                fontWeight = MaterialTheme.typography.bodySmall.fontWeight,
+                fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                fontWeight = MaterialTheme.typography.bodyLarge.fontWeight,
                 color = MaterialTheme.colorScheme.primary,
                 textAlign = TextAlign.Left,
                 modifier = Modifier
@@ -85,7 +86,7 @@ fun populateListOfPlayer(values: MutableList<String>,player: Player) : Int{
     var det : Int
     for (i in 0 until player.rounds){
         det =0
-        if(player.guesses[i]>-1 && player.handswon[i]>-1){
+        if(player.guesses[i]>-1){
             det = if(player.guesses[i]==player.handswon[i]){
                 player.guesses[i]+10
             }else{
@@ -93,8 +94,8 @@ fun populateListOfPlayer(values: MutableList<String>,player: Player) : Int{
             }
             sum+=det
         }
-        values.add("${player.guesses[i]}/${player.handswon[i]}($det)")
+        values.add("${player.handswon[i]} / ${player.guesses[i]}($det)")
 
     }
-    return 0
+    return sum
 }

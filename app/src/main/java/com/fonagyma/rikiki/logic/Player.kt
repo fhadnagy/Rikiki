@@ -6,6 +6,6 @@ class Player (
     val rounds: Int
     ){
     var guesses = Array(rounds){ -1 }
-    var handswon =Array(rounds){ -1 }
+    var handswon =Array(rounds){ 0 }
 }
 

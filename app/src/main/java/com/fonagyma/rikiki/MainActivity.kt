@@ -41,6 +41,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fonagyma.rikiki.logic.Player
 import com.fonagyma.rikiki.ui.components.BorderSurround
+import com.fonagyma.rikiki.ui.components.ChooseCallWinner
+import com.fonagyma.rikiki.ui.components.GameSimulatorScreen
 import com.fonagyma.rikiki.ui.components.GameStateDisplay
 import com.fonagyma.rikiki.ui.components.InputScreen
 import com.fonagyma.rikiki.ui.components.PlayerGuessPicker
@@ -56,8 +58,17 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     //AgeSlider(modifier = Modifier.fillMaxSize(), maxAge = 10)
-                    GuessPickerScreen(maxGuess = 10)
-                    //LogicController()
+                    //GuessPickerScreen(maxGuess = 10)
+                    LogicController()
+                    /*ChooseCallWinner(
+                        callNumber = 5,
+                        playersList = listOf<Player>(
+                            Player(1, "sd", 5),
+                            Player(2, "s22d", 5),
+                            Player(3, "fsfssd", 5)
+                        ),
+                        onPlayerChosen = {}
+                    )*/
                 }
             }
         }
@@ -69,8 +80,8 @@ fun LogicController(modifier: Modifier = Modifier.fillMaxSize()) {
     val players = remember { mutableStateListOf<Player>()}
     var input by remember { mutableStateOf(true)}
     var isGamePlaying by remember{ mutableStateOf(false)}
-    var isEvaluate by remember { mutableStateOf(true)}
-    var maxRounds by remember { mutableStateOf(1)}
+    var isEvaluate by remember { mutableStateOf(false)}
+    var maxRounds by remember { mutableStateOf(3)}
     var lastPlayerID by remember { mutableStateOf(0)}
     //val scrollState = rememberScrollState()
 
@@ -89,14 +100,20 @@ fun LogicController(modifier: Modifier = Modifier.fillMaxSize()) {
                     onMaxRoundChange = { newMax -> maxRounds = newMax; players.clear()},
                     increaseID = {lastPlayerID++},
                     lastPlayerID = lastPlayerID,
-                    onDone = {input = false;isEvaluate=true;isGamePlaying = true}
+                    onDone = {input = false;isGamePlaying = true}
                 )
             }
 
         }
 
         if(isGamePlaying){
-
+            GameSimulatorScreen(
+                players = players.toList(),
+                maxRounds = maxRounds,
+                onGameFinished = { isGamePlaying = false;isEvaluate = true },
+                playerGuess = { id, va, roi -> players[id].guesses[roi] = va },
+                playerCall = { id, roi -> players[id].handswon[roi]++}
+            )
         }
 
         if (isEvaluate){
